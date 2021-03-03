@@ -1,0 +1,12 @@
+all:
+  children:
+    snapclients:
+      hosts:
+        hifiberry-kueche:
+        hifiberry-wohnzimmer:
+
+    snapservers:
+      hosts:
+        hifiberry-wohnzimmer:
+  vars:
+    ansible_user: pi
