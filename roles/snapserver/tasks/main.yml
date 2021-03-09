@@ -1,0 +1,13 @@
+- name: Ensure snapserver is downloaded
+  get_url:
+    url: https://github.com/badaix/snapcast/releases/download/v0.24.0/snapserver_0.24.0-1_armhf.deb
+    dest: '/home/pi/snapserver_0.24.0-1_armhf.deb'
+  register: downloaded_package
+- name: Ensure snapserver is installed
+  apt:
+    deb: '{{downloaded_package.dest}}'
+- name: Ensure snapserver service is enabled and started
+  service:
+    name: snapserver
+    state: started
+    enabled: yes

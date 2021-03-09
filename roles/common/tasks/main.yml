@@ -1,0 +1,13 @@
+- name: install essential packages
+  ansible.builtin.apt:
+    pkg:
+      - vim-nox
+      - tmux
+      - build-essential
+      - libasound2-dev
+      - curl
+      - apt-transport-https
+- name: remove screenreader message
+  ansible.builtin.file:
+    path: /etc/xdg/autostart/piwiz.desktop
+    state: absent

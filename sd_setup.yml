@@ -1,0 +1,38 @@
+- hosts: localhost
+  tasks:
+    - name: Ensure all variables are available
+      include_vars:
+        file: ../vars.yml
+    - name: Ensure data folder is present
+      file:
+        path: '{{fleet_folder}}'
+        state: directory
+    - name: Ensure image is downloaded
+      get_url:
+        url: '{{raspberry_image_url}}'
+        dest: '{{fleet_folder}}/{{raspberry_image_name}}.zip'
+        checksum: '{{raspberry_image_checksum}}'
+      register: downloaded_image
+    - name: Ensure image is unzipped
+      unarchive:
+        src: '{{downloaded_image.dest}}'
+        dest: '{{fleet_folder}}'
+    - name: Ensure SD card is deleted
+      shell: 'diskutil eraseDisk FAT32 SNAPCAST /dev/{{sd_disk}}'
+    - name: Ensure SD card is unmounted for burning the image
+      become: yes
+      shell: diskutil unmount /Volumes/SNAPCAST
+    - name: Ensure image is burned to SD card
+      become: yes
+      shell: 'dd bs=1m if={{fleet_folder}}/{{raspberry_image_name}}.img of=/dev/r{{sd_disk}}'
+    - name: Ensure SSH is enabled
+      file:
+        path: /Volumes/boot/ssh
+        state: touch
+    - name: Ensure WIFI is enabled
+      template:
+        src: ../templates/wpa_supplicant.conf
+        dest: /Volumes/boot/wpa_supplicant.conf
+
+
+        

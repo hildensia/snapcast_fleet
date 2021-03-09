@@ -1,0 +1,15 @@
+- hosts: all
+  become: yes
+  roles:
+    - common
+    - raspotify
+- hosts: snapclients
+  become: yes
+  roles:
+    - snapclient
+- hosts: snapservers
+  become: yes
+  roles:
+    - snapserver
+
+

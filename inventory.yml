@@ -2,7 +2,7 @@ all:
   children:
     snapclients:
       hosts:
-        hifiberry-kueche:
+        #       hifiberry-kueche:
         hifiberry-wohnzimmer:
 
     snapservers:

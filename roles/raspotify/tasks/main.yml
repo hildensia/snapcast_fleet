@@ -1,0 +1,12 @@
+- name: get raspotify apt key
+  ansible.builtin.apt_key:
+    url:  https://dtcooper.github.io/raspotify/key.asc
+    state: present
+- name: setup librespot repository
+  ansible.builtin.apt_repository:
+    repo: deb https://dtcooper.github.io/raspotify raspotify main
+    state: present
+- name: install raspotify
+  ansible.builtin.apt:
+    pkg:
+      - raspotify
