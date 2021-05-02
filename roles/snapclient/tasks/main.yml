@@ -1,3 +1,7 @@
+- name: Ensure asound is available
+  ansible.builtin.apt:
+    pkg:
+      - libasound2-dev
 - name: Ensure snapclient is downloaded
   get_url:
     url: https://github.com/badaix/snapcast/releases/download/v0.24.0/snapclient_0.24.0-1_armhf.deb

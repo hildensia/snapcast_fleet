@@ -2,14 +2,19 @@
   become: yes
   roles:
     - common
-    - raspotify
 - hosts: snapclients
   become: yes
   roles:
     - snapclient
+    - raspotify
 - hosts: snapservers
   become: yes
   roles:
     - snapserver
+    - raspotify
+- hosts: hass-servers
+  become: yes
+  roles:
+    - hass
 
 

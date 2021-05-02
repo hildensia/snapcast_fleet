@@ -4,7 +4,6 @@
       - vim-nox
       - tmux
       - build-essential
-      - libasound2-dev
       - curl
       - apt-transport-https
 - name: remove screenreader message

@@ -2,11 +2,16 @@ all:
   children:
     snapclients:
       hosts:
-        #       hifiberry-kueche:
+        hifiberry-kueche:
         hifiberry-wohnzimmer:
 
     snapservers:
       hosts:
         hifiberry-wohnzimmer:
+
+    hass-servers:
+      hosts:
+        hasso
   vars:
     ansible_user: pi
+    ansible_python_interpreter: /usr/bin/python3

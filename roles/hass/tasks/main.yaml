@@ -1,0 +1,34 @@
+- name: Ensure home assistant requirements are apt installed
+  ansible.builtin.apt:
+    pkg:
+      - python3
+      - python3-pip
+
+- name: Ensure home assistant requirements are pip installed
+  ansible.builtin.pip:
+    name:
+      - docker
+
+- name: Ensure docker service runs
+  ansible.builtin.systemd:
+    name: docker
+    enabled: yes
+    state: started
+    daemon_reload: yes
+
+- name: Ensure home assistant config folder exists
+  file:
+    path: /home/pi/homeassistant-config
+    state: directory
+
+- name: Ensure home assistant docker runs
+  docker_container:
+    name: homeassistant
+    image: homeassistant/raspberrypi4-homeassistant:stable
+    state: started
+    network_mode: host
+    restart_policy: unless-stopped
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /home/pi/homeassistant-config:/config
+

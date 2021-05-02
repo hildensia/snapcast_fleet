@@ -1,0 +1,5 @@
+- name: Ensure the right config.txt is uploaded
+  template: 
+    src: templates/config.txt
+    dest: /boot/config.txt
+

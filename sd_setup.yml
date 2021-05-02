@@ -1,8 +1,5 @@
 - hosts: localhost
   tasks:
-    - name: Ensure all variables are available
-      include_vars:
-        file: ../vars.yml
     - name: Ensure data folder is present
       file:
         path: '{{fleet_folder}}'
@@ -31,7 +28,7 @@
         state: touch
     - name: Ensure WIFI is enabled
       template:
-        src: ../templates/wpa_supplicant.conf
+        src: wpa_supplicant.conf
         dest: /Volumes/boot/wpa_supplicant.conf
 
 
