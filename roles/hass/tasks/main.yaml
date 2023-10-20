@@ -28,6 +28,8 @@
     state: started
     network_mode: host
     restart_policy: unless-stopped
+    devices:
+      - "/dev/serial/by-id/usb-dresden_elektronik_ingenieurtechnik_GmbH_ConBee_II_DE2442422-if00:/dev/ttyConbeeII:rwm"
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /home/pi/homeassistant-config:/config
