@@ -1,5 +1,5 @@
 - name: Ensure the right config.txt is uploaded
   template: 
-    src: templates/config-dac.txt
+    src: templates/config-digi.txt
     dest: /boot/config.txt
 

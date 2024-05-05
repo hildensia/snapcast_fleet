@@ -3,11 +3,7 @@
     pkg:
       - python3
       - python3-pip
-
-- name: Ensure home assistant requirements are pip installed
-  ansible.builtin.pip:
-    name:
-      - docker
+      - python3-docker
 
 - name: Ensure docker service runs
   ansible.builtin.systemd:
@@ -24,10 +20,12 @@
 - name: Ensure home assistant docker runs
   docker_container:
     name: homeassistant
-    image: homeassistant/raspberrypi4-homeassistant:stable
+    image: ghcr.io/home-assistant/home-assistant:stable
     state: started
     network_mode: host
     restart_policy: unless-stopped
+    privileged: yes
+    env: "TZ=Europe/Berlin"
     devices:
       - "/dev/serial/by-id/usb-dresden_elektronik_ingenieurtechnik_GmbH_ConBee_II_DE2442422-if00:/dev/ttyConbeeII:rwm"
     volumes:

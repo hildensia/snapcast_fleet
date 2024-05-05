@@ -1,0 +1,38 @@
+- name: get debmatic apt key
+  ansible.builtin.apt_key:
+    url:  https://apt.debmatic.de/debmatic/public.key
+    state: present
+
+- name: setup debmatic repository
+  ansible.builtin.apt_repository:
+    repo: deb [signed-by=/usr/share/keyrings/debmatic.asc] https://apt.debmatic.de/debmatic stable main
+    state: present
+
+- name: ensure debmatic dependencies are installed
+  ansible.builtin.apt:
+    pkg:
+      - build-essential 
+      - bison 
+      - flex 
+      - libssl-dev
+      - raspberrypi-kernel-headers
+      - pivccu-modules-dkms
+    state: present
+    register: dependencies
+      
+- name: ensure pi is rebooted after pivccu modules were built
+  reboot:
+  when: dependencies.changed
+
+- name: ensure debmatic is installed
+  ansible.builtin.apt:
+    pkg:
+      - debmatic
+    state: present
+
+- name: ensure debmatic is started
+  systemd:
+    name: debmatic
+    enabled: yes
+    state: started
+    daemon_reload: yes

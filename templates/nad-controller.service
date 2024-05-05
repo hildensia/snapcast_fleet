@@ -1,0 +1,13 @@
+[Unit]
+Description=Controller Deamon to Count 
+After=network.target
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=15
+User=pi
+ExecStart=/usr/bin/python3 /home/pi/gas_counter/gas_counter.py
+
+[Install]
+WantedBy=network.target

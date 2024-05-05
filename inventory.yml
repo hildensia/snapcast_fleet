@@ -11,7 +11,7 @@ all:
 
     hass-servers:
       hosts:
-        hasso
+        192.168.188.39
   vars:
     ansible_user: pi
     ansible_python_interpreter: /usr/bin/python3

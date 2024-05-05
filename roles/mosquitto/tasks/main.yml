@@ -1,0 +1,33 @@
+- name: Ensure mosquitto is not installed on bare metal
+  apt:
+    pkg: mosquitto
+    state: absent
+
+- name: Ensure mosquitto clients are installed for testing
+  apt:
+    pkg: mosquitto-clients
+    state: present
+
+- name: Ensure mosquitto config is available
+  template:
+    src: mosquitto.conf
+    dest: /home/pi/mosquitto.conf
+
+- name: Ensure mosquitto pwfile is available
+  template:
+    src: pwfile.conf
+    dest: /home/pi/pwfile.conf
+
+- name: Ensure mosquitto docker runs
+  docker_container:
+    name: mosquitto
+    image: eclipse-mosquitto
+    state: started
+    restart_policy: unless-stopped
+    env: "TZ=Europe/Berlin"
+    ports:
+      - "1883:1883"
+      - '9001:9001'
+    volumes:
+      - /home/pi/mosquitto.conf:/mosquitto/config/mosquitto.conf
+      - /home/pi/pwfile.conf:/mosquitto/config/pwfile.conf

@@ -1,0 +1,12 @@
+[Unit]
+Description=Controller Deamon to control NAD amp via RS232
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=1
+User=pi
+ExecStart=/home/pi/nad-controller/nad-controller -broker-address pi:{{mqtt_password}}@192.168.188.39:1883 -input-topic sbs7g/nadc368/control -output-topic sbs7g/nadc368/info -debug -trace
+
+[Install]
+WantedBy=multi-user.target

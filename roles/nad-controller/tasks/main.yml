@@ -1,0 +1,25 @@
+- name: Ensure go pipeline is installed
+  apt:
+    name: golang
+    state: present
+
+- name: Ensure nad controller package is downloaded from github
+  git:
+    repo: https://github.com/DiederikvandenB/nad-controller
+    dest: /home/pi/nad-controller
+
+- name: Ensure nad controller is built
+  shell:
+    chdir: /home/pi/nad-controller
+    cmd: go build
+
+- name: Ensure service file is populated
+  template:
+    src: nad-controller.service
+    dest: /etc/systemd/system/nad-controller.service
+
+- name: Ensure nad-controller service is enabled and started
+  systemd_service:
+    name: nad-controller
+    state: started
+    enabled: true

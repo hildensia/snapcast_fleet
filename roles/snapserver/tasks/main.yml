@@ -1,13 +1,13 @@
 - name: Ensure snapserver is downloaded
   get_url:
-    url: https://github.com/badaix/snapcast/releases/download/v0.24.0/snapserver_0.24.0-1_armhf.deb
-    dest: '/home/pi/snapserver_0.24.0-1_armhf.deb'
+    url: https://deconz.dresden-elektronik.de/raspbian/beta/deconz-latest-beta.deb
+    dest: '/home/pi/deconz-latest-beta.deb'
   register: downloaded_package
 - name: Ensure snapserver is installed
   apt:
     deb: '{{downloaded_package.dest}}'
 - name: Ensure snapserver service is enabled and started
   service:
-    name: snapserver
+    name: deconz 
     state: started
     enabled: yes

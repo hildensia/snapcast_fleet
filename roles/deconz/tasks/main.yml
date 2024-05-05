@@ -1,0 +1,14 @@
+- name: Ensure deconz apt key is available
+  ansible.builtin.apt_key:
+    url: http://phoscon.de/apt/deconz.pub.key
+    state: present
+
+- name: Ensure deconz repository is setup
+  ansible.builtin.apt_repository:
+    repo: deb https://phoscon.de/apt/deconz {{raspbian_version}} main
+    state: present
+
+- name: Ensure deconz is installed
+  ansible.builtin.apt:
+    pkg: deconz
+    state: present

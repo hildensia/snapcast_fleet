@@ -1,0 +1,152 @@
+
+# Configure a default setup of Home Assistant (frontend, api, etc)
+default_config:
+
+# Text to speech
+tts:
+  - platform: google_translate
+
+group: !include groups.yaml
+automation: !include automations.yaml
+script: !include scripts.yaml
+scene: !include scenes.yaml
+
+# Example configuration.yaml entry for the Telegram Bot
+telegram_bot:
+  - platform: polling
+    api_key: !secret telegram_api_key
+    allowed_chat_ids:
+      - 93972795
+
+# Example configuration.yaml entry for the notifier
+notify:
+  - platform: telegram
+    name: telegram.johannes
+    chat_id: 93972795
+
+light:
+  - platform: group
+    name: Arbeitszimmer Licht
+    entities:
+      - light.arbeitszimmer_tuer
+      - light.arbeitszimmer_mitte_tuer
+      - light.arbeitszimmer_mitte_fenster
+      - light.arbeitszimmer_fenster
+
+    # logger:
+    #   default: info
+    #   logs:
+    #     homeassistant.components.media_player: debug
+    #     homeassistant.core: debug
+    #     homeassistant.components.zha: debug
+    #     bellows.zigbee.application: debug
+    #     bellows.ezsp: debug
+    #     zigpy: debug
+    #     zigpy_cc: debug
+    #     zigpy_deconz.zigbee.application: debug
+    #     zigpy_deconz.api: debug
+    #     zigpy_xbee.zigbee.application: debug
+    #     zigpy_xbee.api: debug
+    #     zigpy_zigate: debug
+    #     zigpy_znp: debug
+    #     zhaquirks: debug
+template:
+  - trigger:
+      - platform: time_pattern
+        hours: "0"
+        minutes: "0"
+    sensor:
+      - name: "rain_midnight"
+        unique_id: "rain_midnight"
+        state: "{{ states('sensor.wetterstation_rain_counter') | float}}"
+        unit_of_measurement: "mm"
+      
+  - sensor:
+     - name: "Regen heute"
+       unique_id: "rain_today"
+       state: "{{ (states('sensor.wetterstation_rain_counter')|float - states('sensor.rain_midnight')|float) | round(1) }}"
+       unit_of_measurement: "mm"
+     - name: "Gasverbrauch"
+       unit_of_measurement: "kWh"
+       state_class: total_increasing
+       device_class: energy
+       state: '{{ (states("input_number.gasverbrauch") | float(0)) * 10 }}'
+
+spotcast:
+  sp_dc: !secret sp_dc
+  sp_key: !secret sp_key
+  country: DE
+
+zha:
+  zigpy_config:
+    ota:
+      otau_directory: /config/zigpy_ota
+      ikea_provider: true
+      inovelli_provider: true
+      ledvance_provider: true
+      salus_provider: true
+      sonoff_provider: true
+      thirdreality_provider: true
+
+media_player:
+    - platform: "mqtt-mediaplayer"
+      name: "NAD C368"
+      topic:
+          player_status: "{{ \"on\" if states('sensor.nad_c368_power') == \"1\" else \"off\" }}"
+          song_title: "test"
+          song_volume: "{{ int(states('sensor.nad_c368_volume')|int(0) )}}"
+          source: "{{ states('sensor.nad_c368_source') }}"
+          source_list:
+                  - id: 1
+                    name: TV
+                  - id: 2
+                    name: CD
+                  - id: 3
+                    name: Spotify
+                  - id: 5
+                    name: Phono
+                  - id: 8
+                    name: Bluetooth
+          volume:
+              service: mqtt.publish
+              data:
+                  topic: "sbs7g/nadc368/control"
+                  payload: "{\"command\": \"volume\", \"value\": \"{{volume}}\"}"
+      select_source:
+          service: mqtt.publish
+          data:
+              topic: "sbs7g/nadc368/control"
+              payload: "{\"command\": \"source\", \"value\": \"{{source}}\"}"
+      turn_off:
+          service: mqtt.publish
+          data:
+              topic: "sbs7g/nadc368/control"
+              payload: "{\"command\": \"power\", \"value\": \"0\"}"
+      turn_on:
+          service: mqtt.publish
+          data:
+              topic: "sbs7g/nadc368/control"
+              payload: "{\"command\": \"power\", \"value\": \"1\"}"
+
+mqtt:
+    - sensor:
+        name: "nad_c368_volume"
+        state_topic: "sbs7g/nadc368/info"
+        value_template: "{{ 100 * float(value_json.value) if value_json.command == \"volume\" else states('sensor.nad_c368_volume') | int(0) }}"
+        unit_of_measurement: "%"
+    - sensor:
+        name: "nad_c368_source"
+        state_topic: "sbs7g/nadc368/info"
+        value_template: "{{ value_json.value if value_json.command == \"source\" else states('sensor.nad_c368_source') }}"
+    - sensor:
+        name: "nad_c368_power"
+        state_topic: "sbs7g/nadc368/info"
+        value_template: "{{ value_json.value if value_json.command == \"power\" else states('sensor.nad_c368_power') }}"
+
+homeassistant:
+        customize:
+                media_player.nad_c368:
+                        entity_picture: "/local/NAD_Full_Colour_72ppi.png"
+
+backup:
+
