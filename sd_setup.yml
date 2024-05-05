@@ -7,13 +7,13 @@
     - name: Ensure image is downloaded
       get_url:
         url: '{{raspberry_image_url}}'
-        dest: '{{fleet_folder}}/{{raspberry_image_name}}.zip'
+        dest: '{{fleet_folder}}/{{raspberry_image_name}}.img.xz'
         checksum: '{{raspberry_image_checksum}}'
       register: downloaded_image
-    - name: Ensure image is unzipped
-      unarchive:
-        src: '{{downloaded_image.dest}}'
-        dest: '{{fleet_folder}}'
+    #- name: Ensure image is unzipped
+      #unarchive:
+        #src: '{{downloaded_image.dest}}'
+        #dest: '{{fleet_folder}}'
     - name: Ensure SD card is deleted
       shell: 'diskutil eraseDisk FAT32 SNAPCAST /dev/{{sd_disk}}'
     - name: Ensure SD card is unmounted for burning the image
@@ -24,12 +24,16 @@
       shell: 'dd bs=1m if={{fleet_folder}}/{{raspberry_image_name}}.img of=/dev/r{{sd_disk}}'
     - name: Ensure SSH is enabled
       file:
-        path: /Volumes/boot/ssh
+        path: /Volumes/bootfs/ssh
         state: touch
     - name: Ensure WIFI is enabled
       template:
         src: wpa_supplicant.conf
-        dest: /Volumes/boot/wpa_supplicant.conf
+        dest: /Volumes/bootfs/wpa_supplicant.conf
+    - name: Ensure userconf.txt is available
+      template:
+        src: userconf.txt
+        dest: /Volumes/bootfs/userconf.txt
 
 
         

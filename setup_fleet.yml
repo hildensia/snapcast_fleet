@@ -12,9 +12,13 @@
   roles:
     - snapserver
     - raspotify
+    - nad-controller
 - hosts: hass-servers
   become: yes
   roles:
     - hass
+    - debmatic
+    - mosquitto
+    - deconz
 
 

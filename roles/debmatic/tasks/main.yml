@@ -18,7 +18,7 @@
       - raspberrypi-kernel-headers
       - pivccu-modules-dkms
     state: present
-    register: dependencies
+  register: dependencies
       
 - name: ensure pi is rebooted after pivccu modules were built
   reboot:

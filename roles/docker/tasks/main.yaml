@@ -6,7 +6,7 @@
 
 - name: Ensure docker APT repository is available
   ansible.builtin.apt_repository:
-    repo: deb [arch=armhf] https://download.docker.com/linux/debian buster stable
+    repo: deb [arch=arm64] https://download.docker.com/linux/debian buster stable
 
 - name: Ensure old docker is not installed
   ansible.builtin.apt:

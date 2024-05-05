@@ -15,9 +15,9 @@ mqtt_password: !vault |
           3662393435373232380a623632353961633434383535383666373665346664633839616465663464
           62653036316138653232303633643735616130376463356261646164396662303135
 
-raspberry_image_url: https://downloads.raspberrypi.com/raspios_lite_armhf/images/raspios_lite_armhf-2023-12-11/2023-12-11-raspios-bookworm-armhf-lite.img.xz
-raspberry_image_name: 2023-12-11-raspios-bookworm-armhf-lite
-raspberry_image_checksum: sha256:5df1850573c5e1418f70285c96deea2cfa87105cca976262f023c49b31cdd52b
+raspberry_image_url: https://downloads.raspberrypi.com/raspios_lite_arm64/images/raspios_lite_arm64-2024-03-15/2024-03-15-raspios-bookworm-arm64-lite.img.xz
+raspberry_image_name: 2024-03-15-raspios-bookworm-arm64-lite
+raspberry_image_checksum: sha256:58a3ec57402c86332e67789a6b8f149aeeb4e7bb0a16c9388a66ea6e07012e45
 raspbian_version: bookworm
 
 
