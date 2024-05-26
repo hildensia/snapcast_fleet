@@ -1,0 +1,27 @@
+- name: Ensure docker service runs
+  ansible.builtin.systemd:
+    name: docker
+    enabled: yes
+    state: started
+    daemon_reload: yes
+
+- name: Ensure samba share folder exists
+  file:
+    path: /home/pi/share
+    state: directory
+
+- name: Ensure samba docker runs
+  docker_container:
+    name: samba 
+    image: ghcr.io/servercontainers/samba:latest
+    state: started
+    network_mode: host
+    restart_policy: unless-stopped
+    env: 
+      TZ: "Europe/Berlin"
+      ACCOUNT_pi: "mittel05125alter"
+      UID_pi: "1000"
+      SAMBA_VOLUME_CONFIG_shareddata: "[shareddata]; path=/shares/location; available = yes; browsable = yes; force user = pi; public = yes; guest ok = yes"
+    volumes:
+      - /home/pi/share:/shares/location
+
