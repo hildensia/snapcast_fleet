@@ -1,0 +1,26 @@
+- name: Ensure docker service runs
+  ansible.builtin.systemd:
+    name: docker
+    enabled: yes
+    state: started
+    daemon_reload: yes
+
+- name: Ensure unifi config folder exists
+  file:
+    path: /home/pi/unifi
+    state: directory
+
+- name: Ensure unifi docker runs
+  docker_container:
+    name: unifi
+    image: jacobalberty/unifi
+    state: started
+    restart_policy: unless-stopped
+    env: "TZ=Europe/Berlin"
+    ports:
+      - 8080:8080
+      - 8443:8443
+      - 3478:3478/udp
+    volumes:
+      - /home/pi/unifi:/unifi
+
