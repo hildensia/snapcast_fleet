@@ -10,3 +10,9 @@
   ansible.builtin.apt:
     pkg:
       - raspotify
+- name: ensure correct soundcard is used
+  template:
+    src: templates/asound.conf
+    dest: /etc/asound.conf
+    owner: root
+    mode: '644'
