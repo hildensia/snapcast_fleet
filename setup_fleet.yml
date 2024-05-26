@@ -20,5 +20,11 @@
     - debmatic
     - mosquitto
     - deconz
+- hosts: network-master
+  become: yes
+  roles:
+    - unifi
+    - samba
+    - paperless-ngx
 
 

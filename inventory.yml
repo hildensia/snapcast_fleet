@@ -12,6 +12,10 @@ all:
     hass-servers:
       hosts:
         192.168.188.39
+
+    network-master:
+      hosts:
+        192.168.188.140
   vars:
     ansible_user: pi
     ansible_python_interpreter: /usr/bin/python3
