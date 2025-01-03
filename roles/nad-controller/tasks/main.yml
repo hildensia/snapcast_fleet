@@ -18,8 +18,9 @@
     src: nad-controller.service
     dest: /etc/systemd/system/nad-controller.service
 
-- name: Ensure nad-controller service is enabled and started
-  systemd_service:
-    name: nad-controller
-    state: started
-    enabled: true
+      # - name: Ensure nad-controller service is enabled and started
+      #   ansible.builtin.systemd_service:
+      #     name: nad-controller
+      #     state: started
+      #     enabled: true
+

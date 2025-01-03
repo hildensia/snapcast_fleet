@@ -1,12 +1,32 @@
-- name: Ensure docker APT key is present
-  ansible.builtin.apt_key:
-    url: https://download.docker.com/linux/ubuntu/gpg
-    state: present
-    id: 9DC858229FC7DD38854AE2D88D81803C0EBFCD88
+- name: Ensure docker APT repository is available
+  block:
+  - name: Ensure docker APT key is present
+    ansible.builtin.apt_key:
+      url: https://download.docker.com/linux/ubuntu/gpg
+      state: present
+      id: 9DC858229FC7DD38854AE2D88D81803C0EBFCD88
+
+  - name: repository is in sources.list
+    ansible.builtin.apt_repository:
+      repo: deb [arch=arm64] https://download.docker.com/linux/debian buster stable
+
+  when:
+    - ansible_facts['distribution'] == 'Debian'
 
 - name: Ensure docker APT repository is available
-  ansible.builtin.apt_repository:
-    repo: deb [arch=arm64] https://download.docker.com/linux/debian buster stable
+  block:
+  - name: Ensure docker APT key is present
+    get_url:
+      url: https://download.docker.com/linux/ubuntu/gpg
+      dest: /etc/apt/keyrings/docker.asc
+
+  - name: repository is in sources.list
+    ansible.builtin.apt_repository:
+      repo: deb [signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu noble stable
+
+  when:
+    - ansible_facts['distribution'] == 'Ubuntu'
+    - ansible_facts['distribution_major_version'] | int >= 24
 
 - name: Ensure old docker is not installed
   ansible.builtin.apt:
@@ -28,5 +48,10 @@
 
 - name: Ensure pi user is in docker group
   user: name=pi
+        groups=docker
+        append=yes
+
+- name: Ensure pi user is in docker group
+  user: name=johannes
         groups=docker
         append=yes

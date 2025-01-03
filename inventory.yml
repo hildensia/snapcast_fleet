@@ -15,7 +15,8 @@ all:
 
     network-master:
       hosts:
-        192.168.188.140
+        192.168.188.140:
+          ansible_user: johannes
   vars:
     ansible_user: pi
     ansible_python_interpreter: /usr/bin/python3

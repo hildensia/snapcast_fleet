@@ -19,7 +19,7 @@
     restart_policy: unless-stopped
     env: 
       TZ: "Europe/Berlin"
-      ACCOUNT_pi: {{user_password}}
+      ACCOUNT_pi: "mittel05125alter"
       UID_pi: "1000"
       SAMBA_VOLUME_CONFIG_shareddata: "[shareddata]; path=/shares/location; available = yes; browsable = yes; force user = pi; public = yes; guest ok = yes"
     volumes:
