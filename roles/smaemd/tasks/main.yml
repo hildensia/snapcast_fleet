@@ -1,0 +1,40 @@
+- name: Ensure SMA EM dependencies are installed (configparser)
+  apt:
+    name: cl-py-configparser
+    state: present
+
+- name: Ensure SMA EM dependencies are installed (paho)
+  apt:
+    name: python3-paho-mqtt
+    state: present
+
+- name: Ensure smaemd folder is available
+  file:
+    path: /opt/smaemd
+    state: directory
+
+- name: Ensure smaemd config folder is available
+  file:
+    path: /etc/smaemd
+    state: directory
+
+- name: Ensure nad controller package is downloaded from github
+  git:
+    repo: https://github.com/datenschuft/SMA-EM
+    dest: /opt/smaemd
+
+- name: Ensure config file is populated
+  template:
+    src: smaemd-config
+    dest: /etc/smaemd/config
+
+- name: Ensure service file is populated
+  template:
+    src: smaemd.service
+    dest: /etc/systemd/system/smaemd.service
+
+      # - name: Ensure nad-controller service is enabled and started
+      # systemd_service:
+      #name: smaemd
+      # state: started
+      # enabled: true

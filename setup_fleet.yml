@@ -20,10 +20,12 @@
     - debmatic
     - mosquitto
     - deconz
+    - smaemd
 - hosts: network-master
   become: yes
   roles:
     - unifi
     - samba
     - paperless-ngx
+    - ftp
 
