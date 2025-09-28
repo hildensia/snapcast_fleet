@@ -90,7 +90,7 @@ pvtopic=SMA-PV/status
 # publish all values as single topics (0 or 1)
 publish_single=1
 # How frequently to send updates over (defaults to 20 sec)
-min_update=5
+# min_update=5
 #debug output
 debug=1
 
